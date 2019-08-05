@@ -1,0 +1,6 @@
+.notes
+build
+node_modules
+yarn.lock
+
+src/HomePage/components/SearchSuggestions/searchEngines.js
