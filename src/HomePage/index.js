@@ -1,27 +1,24 @@
 import React, { Component } from 'react'
 import './App.css'
-import SearchSuggestions from './components/SearchSuggestions'
 import SearchQuery from './components/SearchQuery'
+import MultiSearch from './components/SearchSuggestions/multiSearch'
 import { SITE_NAMES } from './constants'
 
 class App extends Component {
     state = {
-        selectedSite: {
-            label: '',
-            domain: '',
-            url: '',
-        },
+        selectedSites: [],
         focusedInput: '',
     }
 
-    handleSiteSelection = selectedSite => {
-        this.setState({ selectedSite, focusedInput: SITE_NAMES.QUERY })
+    handleSiteSelection = selectedSites => {
+        this.setState({ selectedSites, focusedInput: SITE_NAMES.QUERY })
     }
 
     handleSearch = query => {
-        const siteData = this.state.selectedSite
-        const URL = siteData.url.replace(`\{searchTerms\}`, query)
-        window.open(URL, '_blank')
+        this.state.selectedSites.forEach(siteData => {
+            const URL = siteData.url.replace(`\{searchTerms\}`, query)
+            window.open(URL, '_blank')
+        })
     }
 
     getFocusedState = (inputName, inputRef) => {
@@ -31,6 +28,7 @@ class App extends Component {
     }
 
     render() {
+        console.log('^^^^^', this.state)
         return (
             <div className="container">
                 <div className="title-container">
@@ -38,19 +36,13 @@ class App extends Component {
                 </div>
                 <div className="search-container">
                     <div className="search-suggestions">
-                        <SearchSuggestions
-                            handleFocus={ref =>
-                                this.getFocusedState(
-                                    SITE_NAMES.SUGGESTIONS,
-                                    ref,
-                                )
-                            }
+                        <MultiSearch
                             handleSiteSelection={this.handleSiteSelection}
                         />
                     </div>
                     <div className="search-query">
                         <SearchQuery
-                            selectedSite={this.state.selectedSite}
+                            selectedSites={this.state.selectedSites}
                             handleFocus={ref =>
                                 this.getFocusedState(SITE_NAMES.QUERY, ref)
                             }

@@ -49,7 +49,7 @@ export default function CustomizedInputBase(props) {
     }
 
     const getPlaceholderText = () => {
-        return `Search ${props.selectedSite.label}`
+        return `Search`
     }
 
     return (

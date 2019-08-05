@@ -28,6 +28,7 @@
 .search-suggestions {
     flex: 1;
     margin-right: 8px;
+    margin-top: -6px;
 }
 
 .search-query {
