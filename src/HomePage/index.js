@@ -2,33 +2,31 @@ import React, { Component } from 'react'
 import './App.css'
 import SearchQuery from './components/SearchQuery'
 import MultiSearch from './components/SearchSuggestions/multiSearch'
-import { SITE_NAMES } from './constants'
 
 class App extends Component {
     state = {
-        selectedSites: [],
-        focusedInput: '',
+        selectedSites: [
+            {
+                url: 'https://google.com/search?q={searchTerms}',
+            },
+        ],
     }
 
     handleSiteSelection = selectedSites => {
-        this.setState({ selectedSites, focusedInput: SITE_NAMES.QUERY })
+        this.setState({ selectedSites })
     }
 
     handleSearch = query => {
         this.state.selectedSites.forEach(siteData => {
             const URL = siteData.url.replace(`\{searchTerms\}`, query)
-            window.open(URL, '_blank')
+            const result = window.open(URL, '_blank')
+            if (!result) {
+                alert('To open multiple tabs, please disable pop-up blocking')
+            }
         })
     }
 
-    getFocusedState = (inputName, inputRef) => {
-        if (inputRef && this.state.focusedInput === inputName) {
-            setTimeout(() => inputRef.focus(), 100)
-        }
-    }
-
     render() {
-        console.log('^^^^^', this.state)
         return (
             <div className="container">
                 <div className="title-container">
@@ -43,9 +41,6 @@ class App extends Component {
                     <div className="search-query">
                         <SearchQuery
                             selectedSites={this.state.selectedSites}
-                            handleFocus={ref =>
-                                this.getFocusedState(SITE_NAMES.QUERY, ref)
-                            }
                             handleSearch={this.handleSearch}
                         />
                     </div>

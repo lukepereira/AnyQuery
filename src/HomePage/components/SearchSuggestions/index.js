@@ -142,7 +142,6 @@ export default function IntegrationAutosuggest(props) {
                 {...autosuggestProps}
                 inputProps={{
                     autoFocus: true,
-                    inputRef: props.handleFocus,
                     classes,
                     id: 'react-autosuggest-simple',
                     label: 'Select a site',

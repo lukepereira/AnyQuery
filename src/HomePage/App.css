@@ -28,10 +28,31 @@
 .search-suggestions {
     flex: 1;
     margin-right: 8px;
-    margin-top: -6px;
+    margin-top: -12px;
 }
 
 .search-query {
     flex: 2;
     margin-left: 8px;
+}
+
+@media screen and (max-width: 555px) {
+    .search-container {
+        width: 80%;
+        flex-direction: column;
+        flex-direction: column-reverse;
+    }
+    .search-suggestions {
+        margin-top: 50px;
+        margin-left: 0px;
+    }
+    .search-query {
+        margin-left: 0px;
+    }
+    .title {
+        font-size: 15vw;
+    }
+    .title-container {
+        margin-bottom: 20px;
+    }
 }

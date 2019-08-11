@@ -10,14 +10,47 @@ import NoSsr from '@material-ui/core/NoSsr'
 import TextField from '@material-ui/core/TextField'
 import Chip from '@material-ui/core/Chip'
 import CancelIcon from '@material-ui/icons/Cancel'
-import { searchEngines } from './searchEngines'
+import { SEARCH_ENGINES, GROUP_TYPES } from './searchEngines'
 
-const suggestions = orderBy(searchEngines, ['label'], ['asc']).map(
-    suggestion => ({
-        value: suggestion.label,
-        label: suggestion.label,
-    }),
-)
+function getSuggestions() {
+    const emptySuggestions = Object.values(GROUP_TYPES).map(group => ({
+        label: group,
+        options: [],
+    }))
+
+    const suggestions = SEARCH_ENGINES.reduce(
+        (groupsAccumulator, searchEngine) => {
+            if (!searchEngine.groups) {
+                const otherGroup = find(groupsAccumulator, {
+                    label: GROUP_TYPES.OTHER,
+                })
+                otherGroup.options.push({
+                    value: searchEngine.label,
+                    label: searchEngine.label,
+                })
+            } else {
+                searchEngine.groups.forEach(group => {
+                    const foundGroup = find(groupsAccumulator, {
+                        label: group,
+                    })
+                    foundGroup.options.push({
+                        value: searchEngine.label,
+                        label: searchEngine.label,
+                    })
+                })
+            }
+            return groupsAccumulator
+        },
+        emptySuggestions,
+    )
+
+    return suggestions.map(suggestion => {
+        suggestion.options = orderBy(suggestion.options, ['value'], ['asc'])
+        return suggestion
+    })
+}
+
+const suggestions = getSuggestions()
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -28,7 +61,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         padding: 0,
         height: 'auto',
-        minHeight: '40px',
+        minHeight: '45px',
     },
     valueContainer: {
         display: 'flex',
@@ -173,7 +206,7 @@ export default function IntegrationReactSelect(props) {
 
         props.handleSiteSelection(
             selectedSites.map(siteData =>
-                find(searchEngines, { label: siteData.label }),
+                find(SEARCH_ENGINES, { label: siteData.label }),
             ),
         )
     }

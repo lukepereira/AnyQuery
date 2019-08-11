@@ -55,7 +55,7 @@ export default function CustomizedInputBase(props) {
     return (
         <Paper className={classes.root}>
             <InputBase
-                inputRef={props.handleFocus}
+                autoFocus
                 className={classes.input}
                 placeholder={getPlaceholderText()}
                 onKeyDown={handleKeyDown}
